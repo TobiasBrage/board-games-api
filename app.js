@@ -15,5 +15,3 @@ console.log('Port: 1337');
 console.log('URL: bruger:1337');
 
 server.listen(1337);
-
-// test
