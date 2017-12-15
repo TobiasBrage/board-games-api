@@ -67,8 +67,8 @@ module.exports = function (app) {
                             })
                         })
                     } else {
-                        db.execute(`INSERT INTO tictactoeBoards VALUES ('', '${gameId}', 'circle', 'none', '${userId}', '${CurDateTime}')`, (err, rows) => {
-                            db.execute(`INSERT INTO tictactoeBoards VALUES ('', '${gameId}', 'cross', 'none', '${opponentId}', '${CurDateTime}')`, (err, rows) => {
+                        db.execute(`INSERT INTO tictactoeBoards VALUES ('', '${gameId}', 'circle', 'none', '${opponentId}', '${CurDateTime}')`, (err, rows) => {
+                            db.execute(`INSERT INTO tictactoeBoards VALUES ('', '${gameId}', 'cross', 'none', '${userId}', '${CurDateTime}')`, (err, rows) => {
                                 res.json({"message": "gameCreated"});
                             })
                         })
