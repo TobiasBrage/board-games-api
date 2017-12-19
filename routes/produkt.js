@@ -92,6 +92,28 @@ module.exports = function (app) {
         })
     });
 
+    app.get('/board/available/:id', function (req, res) {
+        let gameId = req.params.id.replace("id=", "");
+        db.query(`SELECT COUNT(*) as 'board' from tictactoeBoards where boardId = '${gameId}' limit 1`, function (err, data) {
+            if (data[0].board >= 1) {
+                res.json({"message": 'boardAvailable'});
+            } else {
+                res.json({"message": 'boardNotAvailable'});
+            }
+        })
+    });
+
+    app.get('/opponent/available/:id', function (req, res) {
+        let opponentId = req.params.id.replace("id=", "");
+        db.query(`SELECT COUNT(*) as 'opponent' from tictactoeUsers where id = '${opponentId}' limit 1`, function (err, data) {
+            if (data[0].opponent == 1) {
+                res.json({"message": 'opponentAvailable'});
+            } else {
+                res.json({"message": 'opponentNotAvailable'});
+            }
+        })
+    });
+
     app.post('/board/opponent/', function (req, res) {
         let gameId = req.body.gameId;
         let userId = req.body.userId;
@@ -104,6 +126,26 @@ module.exports = function (app) {
         let gameId = req.params.id.replace("id=", "");
         db.query(`select * from tictactoeBoards where boardId = ${gameId} order by id desc limit 1`, function (err, data) {
             res.send(data);
+        })
+    });
+
+    app.post('/add/board/move/', function (req, res) {
+        let boardId = req.body.boardId;
+        let userId = req.body.turnId;
+        let turn = req.body.turn;
+        let symbol = req.body.symbol;
+        let curDate = new Date();
+        let curDay = curDate.getDate();
+        let curMonth = curDate.getMonth()+1;
+        let curYear = curDate.getFullYear();
+        let curTime = curDate.getHours()+''+curDate.getMinutes();
+        let CurDateTime = curDay+''+curMonth+''+curYear+''+curTime;
+        db.execute(`INSERT INTO tictactoeBoards VALUES ('', '${boardId}', '${symbol}', '${turn}', '${userId}', '${CurDateTime}')`, (err, rows) => {
+            if (err) {
+                res.json({"message": "moveError"});
+            } else {
+                res.json({"message": "moveAdded"});
+            }
         })
     });
 
