@@ -32,6 +32,13 @@ module.exports = function (app) {
         })
     });
 
+    app.get('/reset/user/:id', function (req, res) {
+        let userId = req.params.id.replace("id=", "");
+        db.execute(`UPDATE tictactoeUsers SET gameId = '0', playing= 'no' WHERE id = '${userId}'`, (err, rows) => {
+            res.json({"message":"resetUser"});
+        })
+    });
+
     app.get('/user/opponent/:id', function (req, res) {
         let userId = req.params.id.replace("id=", "");
         db.execute(`SELECT COUNT(*) as 'opponent' FROM tictactoeUsers WHERE playing = 'no' and not id = ${userId}`, function (err, opponentActive) {
